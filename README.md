@@ -65,7 +65,7 @@ EXTRA - Caso você queira usar outro campo no lugar de "account_ID" basta substi
 
 -------------------------------------------------------------------
 
-## 4 - Associar contato com empresa com base em uma propriedade - [Codigo completo](https://github.com/DiogoThou/hubspot/blob/main/Associar%20empresa%20ao%20contato%20quando%20o%20%22nome%20da%20empresa%22%20for%20igual) Node16x
+## 4 - Associar contato com empresa com base no "nome da empresa" - [Codigo completo](https://github.com/DiogoThou/hubspot/blob/main/Associar%20empresa%20ao%20contato%20quando%20o%20%22nome%20da%20empresa%22%20for%20igual) Node16x
 
 Existem casos em que o contato não tem um site ou o e-mail dele é gratuito. Quando é assim, o HubSpot não cria uma empresa para ele automaticamente. Isso acaba prejudicando análises relacionadas às empresas do Hub (como quantidade de MQLs/SQLs/clientes). O código acima ajuda você a criar uma empresa automaticamente para esses contatos. Ele procura com base no campo "Nome da empresa" nativo do Hub. Caso exista uma empresa no Hub com o mesmo nome, ele vai associar automaticamente com o contato. Caso contrário, ele vai pegar o "Nome da empresa" e criar uma nova empresa com esse valor... e associar no final!
 
