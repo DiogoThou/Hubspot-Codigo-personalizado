@@ -82,5 +82,23 @@ Existem casos em que o contato não tem um site ou o e-mail dele é gratuito. Qu
 
 -------------------------------------------------------------------
 
+## 5 - Formatar telefone/celular do contato - [Codigo completo](https://github.com/DiogoThou/Hubspot-Codigo-personalizado/blob/main/Formatar%20celular%20do%20contato) Node16x
+
+A ideia é formatar o celular do contato, assim evitando erros na hora de fazer uma chamada ou uma comunicação via WhatsApp. No código, estou usando o "mobilePhone", mas também daria para usar com o telefone. Basta alterar esta variável para "phone".
+A ideia é caso o telefone esteja desformatado, formatar para o padrão do HubSpot +55-00-90000-0000 - e caso seja identificado que é um telefone e não um celular, formatar como +55-00-0000-0000.
+
+
+**Instruções:**
+
+1 - Configurar as propriedades para [incluir no codigo](https://diovofrito.com/blog/wp-content/uploads/2024/05/formatartelefone.png) - e as propriedades de [saída de dados](https://diovofrito.com/blog/wp-content/uploads/2024/05/formatartelefone1.png);
+
+2 - SALVAR! Criar um campo de "copiar valor da propriedade" e [configurar desta maneira](https://diovofrito.com/blog/wp-content/uploads/2024/05/formatartelefone2.png) para receber o resultado de phone; 
+
+4 - Testar em um campo de celular que não esteja formatado;
+
+5 - Codigo funcionando <3 
+
+-------------------------------------------------------------------
+
 
 
