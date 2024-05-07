@@ -46,7 +46,7 @@ Existem casos, como newsletters, em que temos apenas o e-mail da pessoa dentro d
 
 -------------------------------------------------------------------
 
-## 3 - Associar contato com empresa com base em uma propriedade - [Codigo completo](https://github.com/DiogoThou/hubspot/blob/main/Associar%20contato%20com%20empresa%20com%20base%20em%20uma%20propriedade%20(cnpj%20ou%20codigo%20de%20identifica%C3%A7%C3%A3o%20do%20cliente)) Node16x
+## 3 - Associar contato com empresa com base em uma propriedade - [Codigo completo](https://github.com/DiogoThou/hubspot/blob/main/Associar%20contato%20com%20empresa%20com%20base%20em%20uma%20propriedade%20(cnpj%20ou%20codigo%20de%20identifica%C3%A7%C3%A3o%20do%20cliente) Node16x
 
 Este código ajuda você a associar contatos com empresas com base em uma propriedade específica (pode ser o CNPJ, campo de identificação do cliente, que neste código chamamos de "Account_ID" ou qualquer outra propriedade que precisa ser igual no contato e na empresa). Caso a propriedade não seja igual, ele vai criar uma nova empresa para este contato já com este campo copiado para a empresa. 
 
@@ -55,13 +55,30 @@ Este código ajuda você a associar contatos com empresas com base em uma propri
 
 1 - Criar um [aplicativo privado](https://br.developers.hubspot.com/docs/api/private-apps) no hubspot, copiar o token e inserir no codigo em "VALOR DO SEU TOKEN";
 
-2 - [Configuração de Propriedade para incluir no código (link)](https://diovofrito.com/blog/wp-content/uploads/2024/05/associarcontatocomempresa.png)
+2 - [Configuração de Propriedade para incluir no código (link)](https://diovofrito.com/blog/wp-content/uploads/2024/05/associarcontatocomempresa.png);
 
 4 - Testar um contato e uma empresa onde ambos tenham a propriedade (que você definiu) com os mesmos valores;
 
 5 - Codigo funcionando <3 
 
 EXTRA - Caso você queira usar outro campo no lugar de "account_ID" basta substituir este valor pelo nome interno do seu campo no codigo e em toda instrução!
+
+-------------------------------------------------------------------
+
+## 4 - Associar contato com empresa com base em uma propriedade - [Codigo completo](https://github.com/DiogoThou/hubspot/blob/main/Associar%20empresa%20ao%20contato%20quando%20o%20%22nome%20da%20empresa%22%20for%20igual) Node16x
+
+Existem casos em que o contato não tem um site ou o e-mail dele é gratuito. Quando é assim, o HubSpot não cria uma empresa para ele automaticamente. Isso acaba prejudicando análises relacionadas às empresas do Hub (como quantidade de MQLs/SQLs/clientes). O código acima ajuda você a criar uma empresa automaticamente para esses contatos. Ele procura com base no campo "Nome da empresa" nativo do Hub. Caso exista uma empresa no Hub com o mesmo nome, ele vai associar automaticamente com o contato. Caso contrário, ele vai pegar o "Nome da empresa" e criar uma nova empresa com esse valor... e associar no final!
+
+
+**Instruções:**
+
+1 - Criar um [aplicativo privado](https://br.developers.hubspot.com/docs/api/private-apps) no hubspot, copiar o token e inserir no codigo em "VALOR DO SEU TOKEN";
+
+2 - Configurar a [Saídas de dados](https://diovofrito.com/blog/wp-content/uploads/2024/05/associarcontatoempresamesmonome.png) para ter o retorno caso o codigo de positivo;
+
+4 - Testar em um contato que não tenha uma empresa associada e que o campo "nome da empresa" esteja preenchido;
+
+5 - Codigo funcionando <3 
 
 -------------------------------------------------------------------
 
