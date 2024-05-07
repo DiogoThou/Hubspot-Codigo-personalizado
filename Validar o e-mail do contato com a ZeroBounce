@@ -1,0 +1,44 @@
+const axios = require('axios');
+
+const zeroBounceAPI = " TOKEN DO ZEROBOUNCE ";
+
+exports.main = async (event, callback) => {
+
+    /**
+     * @name validateEmailAddress
+     * @returns {Promise} Retorna um objeto axios
+     */
+    const validateEmailAddress = async (email) => {
+        if (!zeroBounceAPI) throw new Error('A chave da API ZeroBounce não está configurada');
+        if (!email) throw new Error('O e-mail não está definido');
+        
+        const endpoint = `https://api.zerobounce.net/v2/validate?api_key=${zeroBounceAPI}&email=${email}&ip_address=""`;
+
+        return axios.get(endpoint);
+    };
+
+    const contactEmail = event.inputFields.contactEmail;
+
+    if (!contactEmail) throw new Error('O email de contato não está definido, você tem certeza de que inseriu o domínio em "properties to include in code"?');
+
+    const zeroBounceResponse = await validateEmailAddress(contactEmail);
+
+    if (!zeroBounceResponse.data) throw new Error(`Não foi possível obter informações do ZeroBounce`);
+
+    const { status, address, free_email, firstname, lastname, gender, country, region, city, zipcode } = zeroBounceResponse.data;
+
+    callback({
+        outputFields: {
+            status,
+            address,
+            free_email,
+            firstname,
+            lastname,
+            gender,
+            country,
+            region,
+            city,
+            zipcode
+        }
+    });
+};
