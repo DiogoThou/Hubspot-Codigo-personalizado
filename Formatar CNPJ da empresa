@@ -1,0 +1,45 @@
+const hubspot = require("@hubspot/api-client");
+
+const hubspotClient = new hubspot.Client({
+    accessToken: "VALOR DO SEU TOKEN", // Substitua com seu token de acesso real
+});
+
+exports.main = async (event, callback) => {
+    // Verifica se hs_object_id está definido
+    if (!event.inputFields["hs_object_id"]) {
+        console.error("hs_object_id não está definido.");
+        return;
+    }
+
+    const hs_object_id = event.inputFields["hs_object_id"];
+    const cnpj = event.inputFields["cnpj_new"].trim(); // Obtém o CNPJ da entrada e remove espaços em branco
+
+    try {
+        // Verifica se o CNPJ está no formato correto (apenas números)
+        const onlyNumbersCnpj = cnpj.replace(/\D/g, ''); // Remove todos os caracteres que não são números
+        if (!onlyNumbersCnpj.match(/^\d{14}$/)) { // Verifica se o CNPJ tem 14 dígitos após remover caracteres não numéricos
+            console.log("CNPJ inválido:", cnpj);
+            return; // Retorna sem fazer nada se o CNPJ não estiver no formato correto
+        }
+
+        // Formata o CNPJ com pontos e traço (XX.XXX.XXX/YYYY-ZZ)
+        const formattedCnpj = onlyNumbersCnpj.replace(
+            /^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,
+            '$1.$2.$3/$4-$5'
+        );
+
+        // Atualiza a propriedade 'cnpj_new' na empresa com o CNPJ formatado
+        await hubspotClient.crm.companies.basicApi.update(
+            hs_object_id,
+            { properties: { cnpj_new: formattedCnpj } }
+        );
+
+        console.log("CNPJ formatado atualizado:", formattedCnpj);
+
+        // Define a saída 'cnpj_new' com o CNPJ formatado
+        callback(null, { cnpj_new: formattedCnpj });
+    } catch (err) {
+        console.error("Erro ao formatar CNPJ:", err);
+        throw err; // Propaga o erro para ser tratado pela plataforma HubSpot
+    }
+};
