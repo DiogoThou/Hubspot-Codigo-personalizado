@@ -46,7 +46,7 @@ Existem casos, como newsletters, em que temos apenas o e-mail da pessoa dentro d
 
 -------------------------------------------------------------------
 
-## 3 - Associar contato com empresa com base em uma propriedade - [Codigo completo](https://github.com/DiogoThou/hubspot/blob/main/Associar%20contato%20com%20empresa%20com%20base%20em%20uma%20propriedade%20(cnpj%20ou%20codigo%20de%20identifica%C3%A7%C3%A3o%20do%20cliente) Node16x
+## 3 - Associar contato com empresa com base em uma propriedade - [Codigo completo](https://diovofrito.com/s/git-cliente) Node16x
 
 Este código ajuda você a associar contatos com empresas com base em uma propriedade específica (pode ser o CNPJ, campo de identificação do cliente, que neste código chamamos de "Account_ID" ou qualquer outra propriedade que precisa ser igual no contato e na empresa). Caso a propriedade não seja igual, ele vai criar uma nova empresa para este contato já com este campo copiado para a empresa. 
 
