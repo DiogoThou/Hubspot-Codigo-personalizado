@@ -1,0 +1,54 @@
+const hubspot = require('@hubspot/api-client');
+
+exports.main = (event, callback) => {
+
+  const hubspotClient = new hubspot.Client({
+    accessToken: " CODIGO DE TOKEN ", // Substitua com seu token de acesso real
+  });
+
+  hubspotClient.crm.contacts.basicApi.getById(event.object.objectId, ["account_id"])
+    .then(results => {
+      let account_id = results.body.properties.account_id;
+
+      const filter = { propertyName: 'account_id', operator: 'EQ', value: account_id }
+      const filterGroup = { filters:    [filter]     }
+      const sort = JSON.stringify({ propertyName: 'account_id', direction: 'DESCENDING'})
+      const properties = ['account_id']
+      const limit = 1
+      const after = 0
+
+      const searchCriteria = {
+        filterGroups: [filterGroup],
+        sorts: [sort],
+        properties,
+        limit,
+        after
+      }
+
+      hubspotClient.crm.companies.searchApi.doSearch(searchCriteria).then(searchCompanyResponse => {
+
+        if (searchCompanyResponse.body.total == 0) {
+          console.log("Empresa não encontrada, criando e associando");
+          const newCompany = {
+            properties: {
+              name: 'Nova empresa - Associação',
+              account_id: account_id
+            }
+          };
+
+          hubspotClient.crm.companies.basicApi.create(newCompany).then(createdCompany => {
+            hubspotClient.crm.companies.associationsApi.create(createdCompany.body.id, 'contacts', event.object.objectId, 'company_to_contact');
+          }).catch(err => {
+            console.error('Erro ao criar e associar a empresa: ', err);
+          });
+        } else {
+          hubspotClient.crm.companies.associationsApi.create(searchCompanyResponse.body.results[0].id, 'contacts', event.object.objectId, 'company_to_contact');
+        }
+      });
+
+      callback({outputFields: {}});
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
