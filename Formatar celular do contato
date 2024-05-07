@@ -1,0 +1,65 @@
+exports.main = async (event, callback) => {
+    const phoneNumber = event.inputFields.mobilephone;
+
+    if (!phoneNumber) throw new Error('O número de telefone não está definido. Verifique se você inseriu o número de telefone nas "propriedades para incluir no código".');
+
+    const formattedPhoneNumbers = formatPhoneNumber(phoneNumber);
+
+    callback({
+        outputFields: {
+            mobilephone: formattedPhoneNumbers.mobilephone,
+            phone: formattedPhoneNumbers.phone
+        }
+    });
+}
+
+/**
+ * Formata um número de telefone para o padrão desejado.
+ * @param {string} phoneNumber - O número de telefone a ser formatado.
+ * @returns {Object} - Um objeto contendo o número de telefone formatado.
+ */
+const formatPhoneNumber = phoneNumber => {
+    // Remover caracteres não numéricos
+    const cleaned = phoneNumber.replace(/\D/g, '');
+
+    // Adicionar +55 e formatar o número inteiro se tiver menos de 11 caracteres
+    if (cleaned.length === 10) {
+        const countryCode = "+55";
+        const areaCode = cleaned.substring(0, 2);
+        const firstPart = cleaned.substring(2, 6);
+        const secondPart = cleaned.substring(6);
+        return {
+            mobilephone: null,
+            phone: `${countryCode}-${areaCode}-${firstPart}-${secondPart}`
+        };
+    }
+
+    // Formatar como +55-DD-0000-0000 se tiver 11 caracteres
+    if (cleaned.length === 11) {
+        const countryCode = "+55";
+        const areaCode = cleaned.substring(0, 2);
+        const firstPart = cleaned.substring(2, 7);
+        const secondPart = cleaned.substring(7);
+        return {
+            mobilephone: `${countryCode}-${areaCode}-${firstPart}-${secondPart}`,
+            phone: null
+        };
+    }
+
+    // Formatar como +55-00-0000-00000 se tiver menos de 17 caracteres no final
+    if (cleaned.length < 17) {
+        const countryCode = "+55";
+        return {
+            mobilephone: null,
+            phone: `${countryCode}-00-${cleaned.substring(0, 4)}-${cleaned.substring(4)}`
+        };
+    }
+
+    // Retornar o número original se tiver mais de 17 caracteres
+    return {
+        mobilephone: phoneNumber,
+        phone: null
+    };
+}
+
+exports.formatPhoneNumber = formatPhoneNumber;
