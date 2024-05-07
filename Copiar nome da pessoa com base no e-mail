@@ -1,0 +1,21 @@
+exports.main = async (event, callback) => {
+  const email = event.inputFields['email'];
+
+  if (email && typeof email === 'string') {
+    const namePattern = /^([a-zA-Z]+)\.([a-zA-Z]+)@/;
+    const match = email.match(namePattern);
+
+    if (match) {
+      const firstname = match[1];
+      const lastname = match[2];
+
+      callback({
+        outputFields: {
+          email: email,
+          firstname: firstname,
+          lastname: lastname
+        }
+      });
+    }
+  }
+};
