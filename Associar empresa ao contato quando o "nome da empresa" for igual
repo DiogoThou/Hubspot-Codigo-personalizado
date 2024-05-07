@@ -1,0 +1,88 @@
+const hubspot = require('@hubspot/api-client');
+
+exports.main = (event, callback) => {
+  const hubspotClient = new hubspot.Client({
+    accessToken: " VALOR DO TOKEN ", // Substitua com seu token de acesso real
+  });
+
+  // Recupera a propriedade "company" do contato atualmente inscrito
+  hubspotClient.crm.contacts.basicApi.getById(event.object.objectId, ["nome_da_empresa"]) // Supondo que "company_name" seja o campo personalizado para o nome da empresa
+    .then(results => {
+      const companyName = results.body.properties.nome_da_empresa;
+
+      if (!companyName) {
+        console.error('Nome da empresa está vazio ou nulo.');
+        callback({ error: 'Nome da empresa não fornecido.' });
+        return;
+      }
+
+      // Cria critérios de pesquisa
+      const searchCriteria = {
+        "filterGroups":[
+          {
+            "filters":[
+              {
+                "propertyName":"name",
+                "operator":"EQ",
+                "value":companyName
+              }
+            ]
+          }
+        ],
+        "properties":["name"],
+        "limit":1
+      };
+
+      // Pesquisa no CRM por Empresas que correspondam à variável "companyName"
+      hubspotClient.crm.companies.searchApi.doSearch(searchCriteria)
+        .then(searchCompanyResponse => {
+          if (searchCompanyResponse.body.total === 0) {
+            // Nenhuma empresa encontrada, cria uma nova
+            const companyObj = {
+              "properties": {
+                "name": companyName
+              }
+            };
+
+            hubspotClient.crm.companies.basicApi.create(companyObj)
+              .then(companyCreateResponse => {
+                // Associa o contato recém-criado com a empresa
+                return hubspotClient.crm.companies.associationsApi.create(
+                  companyCreateResponse.body.id,
+                  'contacts',
+                  event.object.objectId,
+                  'company_to_contact'
+                );
+              })
+              .then(() => callback({ outputFields: { "message": "Empresa criada e associada com sucesso." } }))
+              .catch(err => {
+                console.error('Erro ao criar ou associar empresa:', err);
+                callback({ error: 'Falha ao criar ou associar empresa.' });
+              });
+          } else {
+            // Empresa encontrada, apenas cria a associação
+            const companyId = searchCompanyResponse.body.results[0].id;
+
+            hubspotClient.crm.companies.associationsApi.create(
+              companyId,
+              'contacts',
+              event.object.objectId,
+              'company_to_contact'
+            )
+              .then(() => callback({ outputFields: { "message": "Associação criada com sucesso." } }))
+              .catch(err => {
+                console.error('Erro ao associar empresa existente:', err);
+                callback({ error: 'Falha ao associar com empresa existente.' });
+              });
+          }
+        })
+        .catch(err => {
+          console.error('Erro na pesquisa de empresa:', err);
+          callback({ error: 'Falha na pesquisa de empresa.' });
+        });
+    })
+    .catch(err => {
+      console.error('Erro ao recuperar contato:', err);
+      callback({ error: 'Falha ao recuperar informações do contato.' });
+    });
+};
