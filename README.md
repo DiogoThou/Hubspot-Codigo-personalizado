@@ -94,7 +94,24 @@ A ideia é caso o telefone esteja desformatado, formatar para o padrão do HubSp
 
 2 - SALVAR! Criar um campo de "copiar valor da propriedade" e [configurar desta maneira](https://diovofrito.com/blog/wp-content/uploads/2024/05/formatartelefone2.png) para receber o resultado de phone; 
 
-4 - Testar em um campo de celular que não esteja formatado;
+3 - Testar em um campo de celular que não esteja formatado;
+
+4 - Codigo funcionando <3 
+
+-------------------------------------------------------------------
+
+## 6 - Excluir empresa ou negócio de forma automatico - [Codigo completo](https://github.com/DiogoThou/Hubspot-Codigo-personalizado/blob/main/Excluir%20empresa%20ou%20neg%C3%B3cio%20automatico) Node20x
+
+A ideia é excluir uma empresa/negócio de forma automatica (codigos diferentes). No meu exemplo, eu excluo empresas como testes ou empresas que não tem informação alguma no CRM. Assim não preciso fazer essa rotina sempre e excluo por forma de fluxo de automação
+
+
+**Instruções:**
+
+1 - Criar um [aplicativo privado](https://br.developers.hubspot.com/docs/api/private-apps) no hubspot, copiar o token e inserir no codigo em "VALOR DO SEU TOKEN";
+
+2 - Em "Propriedade para incluri no codigo" adicione "hs_object_id" como chave e selecione a propriedade "ID do registro"
+
+4 - Insira o código na caixa e certifique que o idioma do código seja node.js 20x
 
 5 - Codigo funcionando <3 
 
