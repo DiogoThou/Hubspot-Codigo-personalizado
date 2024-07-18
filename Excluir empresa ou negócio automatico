@@ -1,0 +1,46 @@
+Codigo para Negócio:
+
+const hubspot = require('@hubspot/api-client');
+
+exports.main = async (event) => {
+  const token = 'TOKEN DE ACESSO'; // Inserindo o token de acesso aqui
+
+  const hubspotClient = new hubspot.Client({ "accessToken": token });
+
+  const dealId = event.inputFields['hs_object_id']; // Assumindo que o ID do Deal está em 'hs_object_id'
+
+  try {
+    const apiResponse = await hubspotClient.crm.deals.basicApi.archive(dealId);
+    console.log(JSON.stringify(apiResponse, null, 2));
+  } catch (e) {
+    e.message === 'HTTP request failed'
+      ? console.error(JSON.stringify(e.response, null, 2))
+      : console.error(e)
+  }
+};
+
+
+
+-------------------////////////////
+
+
+Codigo para empresa:
+
+const hubspot = require('@hubspot/api-client');
+
+exports.main = async (event) => {
+  const token = 'TOKEN DE ACESSO'; // Inserindo o token de acesso aqui
+
+  const hubspotClient = new hubspot.Client({ "accessToken": token });
+
+  const companyId = event.inputFields['hs_object_id'];
+
+  try {
+    const apiResponse = await hubspotClient.crm.companies.basicApi.archive(companyId);
+    console.log(JSON.stringify(apiResponse, null, 2));
+  } catch (e) {
+    e.message === 'HTTP request failed'
+      ? console.error(JSON.stringify(e.response, null, 2))
+      : console.error(e)
+  }
+};
